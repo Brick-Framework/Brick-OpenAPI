@@ -51,7 +51,7 @@
 
 		<dependency>
 			<groupId>com.brick</groupId>
-			<artifactId>com.brick.logger</artifactId>
+			<artifactId>logger</artifactId>
 			<version>1.0.0</version>
 		</dependency>
 
@@ -70,7 +70,7 @@
 
 		<dependency>
 			<groupId>com.brick</groupId>
-			<artifactId>com.brick.utilities</artifactId>
+			<artifactId>utilities</artifactId>
 			<exclusions>
 				<exclusion>
 					<groupId>org.yaml</groupId>
