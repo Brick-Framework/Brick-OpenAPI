@@ -24,7 +24,6 @@ jobs:
           java-version: '21'
           distribution: 'temurin'
           cache: 'maven'
-          server-id: github
 
       - name: Create Multi-Repo Settings
         run: |
@@ -39,6 +38,11 @@ jobs:
               </server>
               <server>
                 <id>github-logger</id>
+                <username>GitHub Actions</username>
+                <password>\${env.GITHUB_TOKEN}</password>
+              </server>
+              <server>
+                <id>github</id>
                 <username>GitHub Actions</username>
                 <password>\${env.GITHUB_TOKEN}</password>
               </server>
