@@ -1,25 +1,25 @@
 package com.brick.openapi.elements.path.http.methods;
 
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+
 import com.brick.logger.Logger;
-import com.brick.utilities.exception.KeyNotFound;
-
-import jakarta.servlet.http.HttpServletRequest;
-import tools.jackson.databind.JsonNode;
-import tools.jackson.databind.ObjectMapper;
-
 import com.brick.openapi.elements.Components;
-import com.brick.openapi.elements.path.Parameter;
 import com.brick.openapi.elements.path.Response;
 import com.brick.openapi.elements.path.http.HttpStatusCode;
+import com.brick.openapi.elements.path.parameter.Parameter;
 import com.brick.openapi.elements.security.Security;
 import com.brick.openapi.exception.InvalidValue;
 import com.brick.openapi.reader.OpenAPIKeyConstants;
 import com.brick.utilities.BrickMap;
 import com.brick.utilities.BrickRequestData;
+import com.brick.utilities.exception.KeyNotFound;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.util.*;
+import tools.jackson.databind.JsonNode;
 
 public abstract class HttpMethod {
     private final Optional<String> summary;

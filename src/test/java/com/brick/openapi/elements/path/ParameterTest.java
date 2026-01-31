@@ -16,6 +16,8 @@ import java.util.Map;
 import org.junit.jupiter.api.Test;
 
 import com.brick.openapi.elements.Components;
+import com.brick.openapi.elements.path.parameter.Parameter;
+import com.brick.openapi.elements.path.parameter.ParameterType;
 import com.brick.openapi.elements.schema.IntegerSchema;
 import com.brick.openapi.elements.schema.StringSchema;
 import com.brick.openapi.exception.InvalidValue;

@@ -1,4 +1,4 @@
-package com.brick.openapi.elements.path;
+package com.brick.openapi.elements.path.parameter;
 
 import com.brick.logger.Logger;
 import com.brick.openapi.exception.InvalidValue;

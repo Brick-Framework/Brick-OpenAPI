@@ -5,6 +5,8 @@ import com.brick.openapi.elements.info.Contact;
 import com.brick.openapi.elements.info.Info;
 import com.brick.openapi.elements.path.*;
 import com.brick.openapi.elements.path.http.methods.*;
+import com.brick.openapi.elements.path.parameter.Parameter;
+import com.brick.openapi.elements.path.parameter.ParameterType;
 import com.brick.openapi.elements.path.http.HttpStatusCode;
 import com.brick.openapi.elements.schema.ArraySchema;
 import com.brick.openapi.elements.schema.IntegerSchema;
