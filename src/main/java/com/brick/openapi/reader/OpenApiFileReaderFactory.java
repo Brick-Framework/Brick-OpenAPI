@@ -17,16 +17,14 @@ public class OpenApiFileReaderFactory {
 	public static OpenAPIFileReader getReader(File file) throws InvalidData {
 		String[] fileSplitParts = file.getName().toLowerCase().split("\\."); // Cannot Use a Single "." for Splitting because of regex
 		String fileExtension = fileSplitParts[fileSplitParts.length - 1];
-		 
-		switch( fileExtension ) {
-		case YAML:
+		
+		if( YAML.equals(fileExtension) ) {
 			return new OpenAPIFileYamlReader(PATH_PREFIX+file.getName());
-			
-		default:
-			InvalidData exception = new InvalidData("Unrecognizable File Extension : "+file.getName());
-			Logger.logException(exception);
-			throw exception;
 		}
+		 
+		InvalidData exception = new InvalidData("Unrecognizable File Extension : "+file.getName());
+		Logger.logException(exception);
+		throw exception;
 	}
 
 }

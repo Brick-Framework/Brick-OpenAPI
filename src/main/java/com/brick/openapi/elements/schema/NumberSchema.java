@@ -51,10 +51,6 @@ public class NumberSchema extends Schema {
 			return false;
 		}
 		
-		if( this.possibleValues.isPresent() && ! this.possibleValues.get().contains(value) ) {
-			return false;
-		}
-		
-		return true;
+		return !( this.possibleValues.isPresent() && ! this.possibleValues.get().contains(value) );
 	}
 }

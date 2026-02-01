@@ -42,7 +42,7 @@ public class CookieParameter extends Parameter {
 			}
 		}
 		
-		if( this.required.isPresent() && this.required.get() && !isCookieFound ) {
+		if( this.required.isPresent() && Boolean.TRUE.equals(this.required.get()) && !isCookieFound ) {
 			Logger.info(PARAMTER_NOT_FOUND);
 			return false;
 		}

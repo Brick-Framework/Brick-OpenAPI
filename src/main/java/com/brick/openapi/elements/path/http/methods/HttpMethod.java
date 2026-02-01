@@ -2,6 +2,7 @@ package com.brick.openapi.elements.path.http.methods;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -44,7 +45,7 @@ public abstract class HttpMethod {
             }
         }
 
-        this.responses = new HashMap<>();
+        this.responses = new EnumMap<>(HttpStatusCode.class);
         BrickMap responseMap = brickMap.getBrickMap(OpenAPIKeyConstants.RESPONSES);
         for( Map.Entry<String,Object> entry: responseMap ){
             HttpStatusCode statusCode = HttpStatusCode.fromString(entry.getKey());

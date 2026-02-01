@@ -24,7 +24,7 @@ public class QueryParameter extends Parameter {
 		Map<String,String[]> parameterMap = brickRequestData.getQueryParams();
 		
 		if( !parameterMap.containsKey(this.name) ) {
-			if( this.required.isPresent() && this.required.get() ) {
+			if( this.required.isPresent() && Boolean.TRUE.equals(this.required.get()) ) {
 				Logger.info(PARAMTER_NOT_FOUND);
 				return false;
 			}

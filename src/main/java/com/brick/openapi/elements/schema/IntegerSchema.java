@@ -54,11 +54,7 @@ public class IntegerSchema extends Schema {
 		if( this.maximum.isPresent() && value > this.maximum.get() ) {
 			return false;
 		}
-		if( this.possibleValues.isPresent() && !this.possibleValues.get().contains(value) ) {
-			return false;
-		}
-		
-		return true;
+		return !( this.possibleValues.isPresent() && !this.possibleValues.get().contains(value) );
 	}
     
     

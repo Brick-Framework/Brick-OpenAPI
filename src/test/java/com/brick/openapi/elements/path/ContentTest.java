@@ -51,7 +51,7 @@ public class ContentTest {
 		BrickMap contentMap = fileReader.getMap();
 		
 		assertThrows(InvalidValue.class, ()->{
-			Content content = new Content(contentMap, null);
+			new Content(contentMap, null);
 		});
 	}
 

@@ -73,7 +73,7 @@ public class Path {
      * Check If Given uri matches the pattern of uri
      */
     public boolean matches(String uri) {
-    	if( this.pathParameters.size() == 0 ) {
+    	if( this.pathParameters.isEmpty() ) {
     		return this.uri.equals(uri);
     	}
     	
@@ -101,6 +101,7 @@ public class Path {
 		
 		if( !matches(uri) ) {
 			InvalidData invalidData = new InvalidData(uri + "does not match path pattern " + this.uri);
+			Logger.logException(invalidData);
 			throw invalidData;
 		}
 		

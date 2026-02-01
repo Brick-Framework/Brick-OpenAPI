@@ -21,7 +21,7 @@ public class PathParameter extends Parameter{
             KeyNotFound keyNotFound = new KeyNotFound(OpenAPIKeyConstants.REQUIRED);
             Logger.logException(keyNotFound);
             throw keyNotFound;
-        }else if( ! required.get() ){ // Checks if "required" property is false
+        }else if( Boolean.FALSE.equals( required.get() ) ){ // Checks if "required" property is false
             InvalidValue invlaidValue = new InvalidValue(OpenAPIKeyConstants.REQUIRED);
             Logger.logException(invlaidValue);
             throw invlaidValue;
