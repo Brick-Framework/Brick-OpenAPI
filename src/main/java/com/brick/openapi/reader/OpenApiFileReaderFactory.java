@@ -10,6 +10,10 @@ public class OpenApiFileReaderFactory {
 	
 	private static final String PATH_PREFIX = "/openapi/";
 	
+	private OpenApiFileReaderFactory() {
+		super();
+	}
+	
 	public static OpenAPIFileReader getReader(File file) throws InvalidData {
 		String[] fileSplitParts = file.getName().toLowerCase().split("\\."); // Cannot Use a Single "." for Splitting because of regex
 		String fileExtension = fileSplitParts[fileSplitParts.length - 1];

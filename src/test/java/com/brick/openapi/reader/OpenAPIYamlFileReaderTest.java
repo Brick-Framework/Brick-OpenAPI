@@ -1,13 +1,31 @@
 package com.brick.openapi.reader;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertInstanceOf;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import java.io.FileNotFoundException;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
+
+import org.junit.jupiter.api.Test;
+
 import com.brick.openapi.OpenAPI;
 import com.brick.openapi.elements.info.Contact;
 import com.brick.openapi.elements.info.Info;
-import com.brick.openapi.elements.path.*;
-import com.brick.openapi.elements.path.http.methods.*;
+import com.brick.openapi.elements.path.Content;
+import com.brick.openapi.elements.path.Path;
+import com.brick.openapi.elements.path.Response;
+import com.brick.openapi.elements.path.http.HttpStatusCode;
+import com.brick.openapi.elements.path.http.methods.DeleteHttpMethod;
+import com.brick.openapi.elements.path.http.methods.GetHttpMethod;
+import com.brick.openapi.elements.path.http.methods.PostHttpMethod;
+import com.brick.openapi.elements.path.http.methods.PutHttpMethod;
 import com.brick.openapi.elements.path.parameter.Parameter;
 import com.brick.openapi.elements.path.parameter.ParameterType;
-import com.brick.openapi.elements.path.http.HttpStatusCode;
 import com.brick.openapi.elements.schema.ArraySchema;
 import com.brick.openapi.elements.schema.IntegerSchema;
 import com.brick.openapi.elements.schema.Schema;
@@ -15,15 +33,6 @@ import com.brick.openapi.elements.server.Server;
 import com.brick.openapi.elements.server.ServerVariable;
 import com.brick.openapi.exception.InvalidOpenAPISpecification;
 import com.brick.utilities.exception.InvalidData;
-import org.junit.jupiter.api.Test;
-
-import java.io.FileNotFoundException;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 
 public class OpenAPIYamlFileReaderTest {
@@ -49,71 +58,47 @@ public class OpenAPIYamlFileReaderTest {
             openAPIFileYamlReader.getOpenAPI();
         });
     }
-
-    @Test
-    public void getOpenAPI_invalidOpenApiFile_infoVersion_missing() {
-        String filePath = "/dummy_yaml/openapi/dummy_invalid_infoVersion_missing.yaml";
-
-        OpenAPIFileYamlReader openAPIFileYamlReader = new OpenAPIFileYamlReader(filePath);
+    
+    private void assertInvalidOpenApi(String filePath) {
+    	OpenAPIFileYamlReader openAPIFileYamlReader = new OpenAPIFileYamlReader(filePath);
 
         assertThrows(InvalidOpenAPISpecification.class,()->{
             openAPIFileYamlReader.getOpenAPI();
         });
     }
-
+    
     @Test
-    public void getOpenAPI_invalidOpenApiFile_pathParamRequired_missing(){
-        String filePath = "/dummy_yaml/openapi/dummy_invalid_pathParamRequired_missing.yaml";
-
-        OpenAPIFileYamlReader openAPIFileYamlReader = new OpenAPIFileYamlReader(filePath);
-
-        assertThrows(InvalidOpenAPISpecification.class,()->{
-            openAPIFileYamlReader.getOpenAPI();
-        });
+    public void getOpenApi_invalidOpenApiFile() {
+    	//Info and Version Missing
+    	assertInvalidOpenApi("/dummy_yaml/openapi/dummy_invalid_infoVersion_missing.yaml");
+    	
+    	//Path Parameter Required Missing
+    	assertInvalidOpenApi("/dummy_yaml/openapi/dummy_invalid_pathParamRequired_missing.yaml");
+    	
+    	//Path Parameter Missing
+    	assertInvalidOpenApi("/dummy_yaml/openapi/dummy_invalid_pathParam_missing.yaml");
+    	
+    	//Endpoint Invalid
+    	assertInvalidOpenApi("/dummy_yaml/openapi/dummy_invalid_endpoint_invalid.yaml");
+    	
+    	//Invalid Content Type
+    	assertInvalidOpenApi("/dummy_yaml/openapi/dummy_invalid_invalidContentType.yaml");
+    	
+    	//Empty Schema
+    	assertInvalidOpenApi("/dummy_yaml/openapi/dummy_invalid_emptySchema.yaml");
     }
-
-    @Test
-    public void getOpenAPI_invalidOpenApiFile_pathParam_missing(){
-        String filePath = "/dummy_yaml/openapi/dummy_invalid_pathParam_missing.yaml";
-
-        OpenAPIFileYamlReader openAPIFileYamlReader = new OpenAPIFileYamlReader(filePath);
-
-        assertThrows(InvalidOpenAPISpecification.class,()->{
-            openAPIFileYamlReader.getOpenAPI();
-        });
-    }
-
-    @Test
-    public void getOpenAPI_invalidOpenApiFile_endpoint_invalid(){
-        String filePath = "/dummy_yaml/openapi/dummy_invalid_endpoint_invalid.yaml";
-
-        OpenAPIFileYamlReader openAPIFileYamlReader = new OpenAPIFileYamlReader(filePath);
-
-        assertThrows(InvalidOpenAPISpecification.class,()->{
-            openAPIFileYamlReader.getOpenAPI();
-        });
-    }
-
-    @Test
-    public void getOpenAPI_invalidOpenApiFile_invalidContentType(){
-        String filePath = "/dummy_yaml/openapi/dummy_invalid_invalidContentType.yaml";
-
-        OpenAPIFileYamlReader openAPIFileYamlReader = new OpenAPIFileYamlReader(filePath);
-
-        assertThrows(InvalidOpenAPISpecification.class,()->{
-            openAPIFileYamlReader.getOpenAPI();
-        });
-    }
-
-    @Test
-    public void getOpenAPI_validFile_withoutComponents() throws InvalidData, FileNotFoundException, InvalidOpenAPISpecification {
-        String filePath = "/dummy_yaml/openapi/dummy_valid_withoutComponents.yaml";
-
+    
+    private OpenAPI getOpenAPIFromFile(String filePath) throws FileNotFoundException, InvalidData, InvalidOpenAPISpecification {
         OpenAPIFileReader openAPIFileReader = new OpenAPIFileYamlReader(filePath);
-        OpenAPI openAPI = openAPIFileReader.getOpenAPI();
-
+        return openAPIFileReader.getOpenAPI();
+    }
+    
+    @Test
+    public void getOpenAPI_validFile_withoutComponents_infoContact() throws FileNotFoundException, InvalidData, InvalidOpenAPISpecification {
+        OpenAPI openAPI = getOpenAPIFromFile("/dummy_yaml/openapi/dummy_valid_withoutComponents.yaml");
+        
         assertEquals("3.0.4",openAPI.getOpenApiVersion());
-
+        
         //Info Components Test
         Info info = openAPI.getInfo();
         assertEquals("Random Api Title",info.getTitle());
@@ -130,6 +115,11 @@ public class OpenAPIYamlFileReaderTest {
         assertFalse(contact.getName().isPresent());
         assertFalse(contact.getUrl().isPresent());
         assertFalse(contact.getEmail().isPresent());
+    }
+    
+    @Test
+    public void getOpenAPI_validFile_withoutComponents_server() throws FileNotFoundException, InvalidData, InvalidOpenAPISpecification {
+        OpenAPI openAPI = getOpenAPIFromFile("/dummy_yaml/openapi/dummy_valid_withoutComponents.yaml");
 
         //Servers Test
         Server server1 = openAPI.getServers().get(0);
@@ -156,7 +146,11 @@ public class OpenAPIYamlFileReaderTest {
         assertEquals("Port of Server",variable2.getDescription().get());
         assertTrue(variable2.getPossibleValue().isPresent());
         assertEquals(Arrays.asList("8080","443"), variable2.getPossibleValue().get());
+    }
 
+    @Test
+    public void getOpenAPI_validFile_withoutComponents_path() throws InvalidData, FileNotFoundException, InvalidOpenAPISpecification {
+        OpenAPI openAPI = getOpenAPIFromFile("/dummy_yaml/openapi/dummy_valid_withoutComponents.yaml");
         //Path Test
 
         // PATH 1 Test
@@ -192,14 +186,11 @@ public class OpenAPIYamlFileReaderTest {
         assertInstanceOf(PutHttpMethod.class, path.getMethod("put"));
         assertInstanceOf(DeleteHttpMethod.class, path.getMethod("delete"));
     }
-
+    
     @Test
-    public void getOpenAPI_validFile_withComponents() throws  FileNotFoundException, InvalidOpenAPISpecification, InvalidData {
-        String filePath = "/dummy_yaml/openapi/dummy_valid_withComponents.yaml";
-
-        OpenAPIFileReader openAPIFileReader = new OpenAPIFileYamlReader(filePath);
-        OpenAPI openAPI = openAPIFileReader.getOpenAPI();
-
+    public void getOpenApi_validFile_withComponents_infoContact() throws FileNotFoundException, InvalidData, InvalidOpenAPISpecification {
+        OpenAPI openAPI = getOpenAPIFromFile("/dummy_yaml/openapi/dummy_valid_withComponents.yaml");
+        
         assertEquals("3.0.4",openAPI.getOpenApiVersion());
 
         //Info Components Test
@@ -218,7 +209,12 @@ public class OpenAPIYamlFileReaderTest {
         assertFalse(contact.getName().isPresent());
         assertFalse(contact.getUrl().isPresent());
         assertFalse(contact.getEmail().isPresent());
-
+    }
+    
+    @Test
+    public void getOpenApi_validFile_withComponents_server() throws FileNotFoundException, InvalidData, InvalidOpenAPISpecification {
+        OpenAPI openAPI = getOpenAPIFromFile("/dummy_yaml/openapi/dummy_valid_withComponents.yaml");
+        
         //Servers Test
         Server server1 = openAPI.getServers().get(0);
         assertEquals("https://randomurl.com/development/",server1.getUrl());
@@ -244,7 +240,11 @@ public class OpenAPIYamlFileReaderTest {
         assertEquals("Port of Server",variable2.getDescription().get());
         assertTrue(variable2.getPossibleValue().isPresent());
         assertEquals(Arrays.asList("8080","443"), variable2.getPossibleValue().get());
+    }
 
+    @Test
+    public void getOpenAPI_validFile_withComponents_path() throws  FileNotFoundException, InvalidOpenAPISpecification, InvalidData {
+        OpenAPI openAPI = getOpenAPIFromFile("/dummy_yaml/openapi/dummy_valid_withComponents.yaml");
         //Path Test
 
         // PATH 1 Test
@@ -280,16 +280,4 @@ public class OpenAPIYamlFileReaderTest {
         assertInstanceOf(PutHttpMethod.class, path.getMethod("put"));
         assertInstanceOf(DeleteHttpMethod.class, path.getMethod("delete"));
     }
-
-    @Test
-    public void getOpenAPI_invalidOpenApiFile_emptySchema(){
-        String filePath = "/dummy_yaml/openapi/dummy_invalid_emptySchema.yaml";
-
-        OpenAPIFileYamlReader openAPIFileYamlReader = new OpenAPIFileYamlReader(filePath);
-
-        assertThrows(InvalidOpenAPISpecification.class,()->{
-            openAPIFileYamlReader.getOpenAPI();
-        });
-    }
-
 }

@@ -19,7 +19,7 @@ public class Components {
     private final Map<String, Parameter> parameters;
     private final Map<String, Schema> schemas;
     private final Map<String, Response> responses;
-    private final Map<String, SecurityScheme> securityScheme;
+    private final Map<String, SecurityScheme> secSchemeMap;
 
     public Components(BrickMap brickMap) throws KeyNotFound, InvalidValue, CyclicReferenceFound {
         
@@ -32,7 +32,7 @@ public class Components {
         this.responses = new HashMap<>();
         populateResponses(brickMap);
 
-        this.securityScheme = new HashMap<>();
+        this.secSchemeMap = new HashMap<>();
         populateSecurityScheme(brickMap);
         
     }
@@ -81,8 +81,8 @@ public class Components {
         Description: Return SecurityScheme From Map of Responses
      */
     public SecurityScheme getSecurityScheme(String securitySchemeName) throws KeyNotFound {
-        if( this.securityScheme.containsKey(securitySchemeName) ){
-            return this.securityScheme.get(securitySchemeName);
+        if( this.secSchemeMap.containsKey(securitySchemeName) ){
+            return this.secSchemeMap.get(securitySchemeName);
         }
 
         KeyNotFound keyNotFound = new KeyNotFound(securitySchemeName);
@@ -129,7 +129,7 @@ public class Components {
             BrickMap securitySchemeMap = brickMap.getBrickMap(OpenAPIKeyConstants.COMPONENT_SECURITY_SCHEMES);
             for( Map.Entry<String,Object> entry: securitySchemeMap ){
                 SecurityScheme securityScheme = SecuritySchemeFactory.getSecurityScheme(securitySchemeMap.getBrickMap(entry.getKey()));
-                this.securityScheme.put(entry.getKey(), securityScheme);
+                this.secSchemeMap.put(entry.getKey(), securityScheme);
             }
         }
         

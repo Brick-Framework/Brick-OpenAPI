@@ -22,11 +22,9 @@ public class HeaderParameter extends Parameter {
 		Map<String,String> headers = brickRequestData.getHeaders();
 		
 		if( !headers.containsKey(this.name) ) {
-			if( this.required.isPresent() ) {
-				if( this.required.get() ) {
-					Logger.info(PARAMTER_NOT_FOUND);
-					return false;
-				}
+			if( this.required.isPresent() && this.required.get()) {
+				Logger.info(PARAMTER_NOT_FOUND);
+				return false;
 			}
 			
 			return true;

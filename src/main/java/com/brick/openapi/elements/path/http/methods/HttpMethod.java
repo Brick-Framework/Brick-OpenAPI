@@ -30,7 +30,7 @@ public abstract class HttpMethod {
     private final Optional<Boolean> deprecated;
     private final Optional<Security> security;
 
-    public HttpMethod(BrickMap brickMap, Components components, Optional<Security> rootSecurity) throws KeyNotFound, InvalidValue {
+    protected HttpMethod(BrickMap brickMap, Components components, Optional<Security> rootSecurity) throws KeyNotFound, InvalidValue {
         
         this.summary = brickMap.getOptionalString(OpenAPIKeyConstants.SUMMARY);
         this.description = brickMap.getOptionalString(OpenAPIKeyConstants.DESCRIPTION);

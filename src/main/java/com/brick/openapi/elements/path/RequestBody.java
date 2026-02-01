@@ -1,16 +1,14 @@
 package com.brick.openapi.elements.path;
 
-import com.brick.logger.Logger;
-import com.brick.utilities.exception.KeyNotFound;
-
-import tools.jackson.databind.JsonNode;
+import java.util.Optional;
 
 import com.brick.openapi.elements.Components;
 import com.brick.openapi.exception.InvalidValue;
 import com.brick.openapi.reader.OpenAPIKeyConstants;
 import com.brick.utilities.BrickMap;
+import com.brick.utilities.exception.KeyNotFound;
 
-import java.util.Optional;
+import tools.jackson.databind.JsonNode;
 
 public class RequestBody {
     private final Optional<String> description;
@@ -35,10 +33,8 @@ public class RequestBody {
      * Description: Validates Request Body
      */
     public boolean validateRequest(JsonNode requestBody) {
-    	if( !this.required ) {
-    		if( requestBody.isEmpty() ) {
-    			return true;
-    		}
+    	if( !this.required && requestBody.isEmpty()) {
+			return true;
     	}
     	
     	return this.content.validateData(requestBody);

@@ -11,6 +11,11 @@ public class SecuritySchemeFactory {
 
     private static final String SCHEME_HTTP_BASIC = "basic";
     private static final String SCHEME_HTTP_BEARER = "bearer";
+    
+    private SecuritySchemeFactory() {
+    	super();
+    }
+    
     public static SecurityScheme getSecurityScheme(BrickMap brickMap) throws KeyNotFound, InvalidValue {
         
         String type = brickMap.getString(OpenAPIKeyConstants.SCHEME_TYPE);

@@ -1,16 +1,18 @@
 package com.brick.openapi.elements.schema;
 
-import com.brick.logger.Logger;
-import com.brick.utilities.exception.KeyNotFound;
-
-import tools.jackson.databind.JsonNode;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 
 import com.brick.openapi.elements.Components;
 import com.brick.openapi.exception.InvalidValue;
 import com.brick.openapi.reader.OpenAPIKeyConstants;
 import com.brick.utilities.BrickMap;
+import com.brick.utilities.exception.KeyNotFound;
 
-import java.util.*;
+import tools.jackson.databind.JsonNode;
 
 public class ObjectSchema extends Schema {
     private final Map<String,Schema> properties;
@@ -45,15 +47,24 @@ public class ObjectSchema extends Schema {
 		}
 				
 		for( Map.Entry<String, Schema> entry: this.properties.entrySet() ) {
-			//Checking if that property exist in data
-			if( !data.has(entry.getKey()) && this.requiredProperties.contains(entry.getKey()) ) {
-				return false;
-			}else if( data.has(entry.getKey()) && !entry.getValue().validateData(data.get(entry.getKey())) ) { // Validating for That Schema
+			if( isSchemaNotAvailableAndRequired(data, entry) || isSchemaAvailableAndNotValid(data, entry) ) { // If that Schema is available then Validate for That Schema
 				return false;
 			}
 		}
 		
 		return true;
+	}
+
+	private boolean isSchemaNotAvailableAndRequired(JsonNode data, Map.Entry<String, Schema> entry) {
+		boolean isDataAvailable = data.has(entry.getKey());
+		boolean isDataRequired = this.requiredProperties.contains(entry.getKey());
+		return !isDataAvailable && isDataRequired;
+	}
+
+	private boolean isSchemaAvailableAndNotValid(JsonNode data, Map.Entry<String, Schema> entry) {
+		boolean isDataAvailable = data.has(entry.getKey());
+		boolean isDataValid = entry.getValue().validateData(data.get(entry.getKey()));
+		return isDataAvailable && !isDataValid;
 	}
 
 }

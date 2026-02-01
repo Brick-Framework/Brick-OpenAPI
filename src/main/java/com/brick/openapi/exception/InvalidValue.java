@@ -1,14 +1,14 @@
 package com.brick.openapi.exception;
 
 public class InvalidValue extends Exception {
-    private String invalidValue;
+    private String valueForWhichExceptionOccured;
 
     public InvalidValue(String invalidValue) {
         super("Invalid Value : "+invalidValue);
-        this.invalidValue = invalidValue;
+        this.valueForWhichExceptionOccured = invalidValue;
     }
 
     public String getInvalidValue() {
-        return invalidValue;
+        return valueForWhichExceptionOccured;
     }
 }

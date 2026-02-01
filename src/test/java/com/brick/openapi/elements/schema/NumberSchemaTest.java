@@ -25,7 +25,7 @@ public class NumberSchemaTest {
 		FileReader fileReader = new YamlFileReader(filePath);
 		BrickMap numberMap = fileReader.getMap();
 		
-		NumberSchema schema = new NumberSchema(numberMap, null);
+		NumberSchema schema = new NumberSchema(numberMap);
 		
 		assertFalse( schema.validateData(null));
 		assertFalse( schema.validateData(JsonNodeFactory.instance.objectNode()));
@@ -47,7 +47,7 @@ public class NumberSchemaTest {
 		FileReader fileReader = new YamlFileReader(filePath);
 		BrickMap numberMap = fileReader.getMap();
 		
-		NumberSchema schema = new NumberSchema(numberMap, null);
+		NumberSchema schema = new NumberSchema(numberMap);
 		
 		assertTrue( schema.validateData(null) );
 		

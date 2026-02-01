@@ -14,6 +14,11 @@ import java.util.Optional;
     Description: Factory Pattern to Initialise Different Http Methods
  */
 public class HttpMethodFactory {
+	
+	private HttpMethodFactory() {
+		super();
+	}
+	
     public static HttpMethod getHttpMethod(String method, Map<String,Object> methodData, Components components, Optional<Security> rootSecurity) throws InvalidValue, KeyNotFound {
         
         switch( method ){

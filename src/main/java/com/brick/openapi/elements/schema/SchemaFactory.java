@@ -12,6 +12,11 @@ import com.brick.utilities.BrickMap;
     Description: Factory Pattern to Initialise Different Schema Types
  */
 public class SchemaFactory {
+	
+	private SchemaFactory() {
+		super();
+	}
+	
     public static Schema getSchema(BrickMap brickMap, Components components) throws KeyNotFound, InvalidValue {
         // Check if it is Reference if it is, Return Reference else create Object
         if( brickMap.contains(OpenAPIKeyConstants.REFERENCE) ){
@@ -45,16 +50,16 @@ public class SchemaFactory {
 	                    return new ArraySchema(brickMap,components);
 	
 	                case INTEGER:
-	                    return new IntegerSchema(brickMap,components);
+	                    return new IntegerSchema(brickMap);
 	
 	                case NUMBER:
-	                    return new NumberSchema(brickMap,components);
+	                    return new NumberSchema(brickMap);
 	
 	                case OBJECT:
 	                    return new ObjectSchema(brickMap,components);
 	
 	                case STRING:
-	                    return new StringSchema(brickMap,components);
+	                    return new StringSchema(brickMap);
 	            }
             }
             
