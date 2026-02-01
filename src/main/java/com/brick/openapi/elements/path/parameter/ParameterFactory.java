@@ -1,6 +1,5 @@
 package com.brick.openapi.elements.path.parameter;
 
-import com.brick.logger.Logger;
 import com.brick.openapi.elements.Components;
 import com.brick.openapi.exception.InvalidValue;
 import com.brick.openapi.reader.OpenAPIKeyConstants;
@@ -22,13 +21,9 @@ public class ParameterFactory {
 				
 			case QUERY:
 				return new QueryParameter(brickMap, components);
-				
-			default:
-				InvalidValue invalidValue = new InvalidValue(type.toString());
-		        Logger.logException(invalidValue);
-		        throw invalidValue;
 		}
-
+		
+		return null; // Dead Code
 	}
 
 }

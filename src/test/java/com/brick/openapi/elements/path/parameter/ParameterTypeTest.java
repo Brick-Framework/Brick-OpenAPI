@@ -1,4 +1,4 @@
-package com.brick.openapi.elements.path;
+package com.brick.openapi.elements.path.parameter;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
