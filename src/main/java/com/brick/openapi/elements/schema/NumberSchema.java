@@ -1,17 +1,14 @@
 package com.brick.openapi.elements.schema;
 
-import com.brick.logger.Logger;
-import com.brick.utilities.exception.KeyNotFound;
+import java.util.List;
+import java.util.Optional;
 
-import tools.jackson.databind.JsonNode;
-
-import com.brick.openapi.elements.Components;
 import com.brick.openapi.exception.InvalidValue;
 import com.brick.openapi.reader.OpenAPIKeyConstants;
 import com.brick.utilities.BrickMap;
+import com.brick.utilities.exception.KeyNotFound;
 
-import java.util.List;
-import java.util.Optional;
+import tools.jackson.databind.JsonNode;
 
 public class NumberSchema extends Schema {
     private Optional<Double> minimum;
@@ -19,7 +16,7 @@ public class NumberSchema extends Schema {
     private final Optional<List<Double>> possibleValues;
     private final boolean nullable;
 
-    public NumberSchema(BrickMap brickMap, Components components) throws KeyNotFound, InvalidValue {
+    public NumberSchema(BrickMap brickMap) throws KeyNotFound, InvalidValue {
         
         this.minimum = brickMap.getOptionalDouble(OpenAPIKeyConstants.MINIMUM);
         this.maximum = brickMap.getOptionalDouble(OpenAPIKeyConstants.MAXIMUM);
@@ -54,10 +51,6 @@ public class NumberSchema extends Schema {
 			return false;
 		}
 		
-		if( this.possibleValues.isPresent() && ! this.possibleValues.get().contains(value) ) {
-			return false;
-		}
-		
-		return true;
+		return !( this.possibleValues.isPresent() && ! this.possibleValues.get().contains(value) );
 	}
 }

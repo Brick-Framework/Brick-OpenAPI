@@ -25,7 +25,7 @@ public class IntegerSchemaTest {
 		FileReader fileReader = new YamlFileReader(filePath);
 		BrickMap integerMap = fileReader.getMap();
 		
-		IntegerSchema schema = new IntegerSchema(integerMap, null);
+		IntegerSchema schema = new IntegerSchema(integerMap);
 		
 		assertFalse( schema.validateData(null));
 		assertFalse( schema.validateData(JsonNodeFactory.instance.nullNode()));
@@ -48,7 +48,7 @@ public class IntegerSchemaTest {
 		FileReader fileReader = new YamlFileReader(filePath);
 		BrickMap integerMap = fileReader.getMap();
 		
-		IntegerSchema schema = new IntegerSchema(integerMap, null);
+		IntegerSchema schema = new IntegerSchema(integerMap);
 		
 		assertTrue( schema.validateData(null) );
 		assertTrue( schema.validateData(JsonNodeFactory.instance.nullNode()));

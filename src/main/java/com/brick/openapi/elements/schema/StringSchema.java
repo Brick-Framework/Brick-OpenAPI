@@ -1,18 +1,16 @@
 package com.brick.openapi.elements.schema;
 
-import com.brick.logger.Logger;
-import com.brick.utilities.exception.KeyNotFound;
-
-import tools.jackson.databind.JsonNode;
-
-import com.brick.openapi.elements.Components;
-import com.brick.openapi.exception.InvalidValue;
-import com.brick.openapi.reader.OpenAPIKeyConstants;
-import com.brick.utilities.BrickMap;
-
 import java.util.List;
 import java.util.Optional;
 import java.util.regex.Pattern;
+
+import com.brick.logger.Logger;
+import com.brick.openapi.exception.InvalidValue;
+import com.brick.openapi.reader.OpenAPIKeyConstants;
+import com.brick.utilities.BrickMap;
+import com.brick.utilities.exception.KeyNotFound;
+
+import tools.jackson.databind.JsonNode;
 
 enum StringSchemaFormat {
     DATE("date"), // Currently No Validation Supported
@@ -49,7 +47,7 @@ public class StringSchema extends Schema{
     private final Optional<List<String>> possibleValues;// enum in openapi
     private final boolean nullable;
 
-    public StringSchema(BrickMap brickMap, Components components) throws InvalidValue, KeyNotFound {
+    public StringSchema(BrickMap brickMap) throws InvalidValue, KeyNotFound {
         
         Optional<String> stringSchemaType = brickMap.getOptionalString(OpenAPIKeyConstants.FORMAT);
         if( stringSchemaType.isPresent() ){
@@ -98,10 +96,8 @@ public class StringSchema extends Schema{
 			
 		}
 		
-		if( this.possibleValues.isPresent() ) {
-			if( !this.possibleValues.get().contains(value) ) {
-				return false;
-			}
+		if( this.possibleValues.isPresent() && !this.possibleValues.get().contains(value) ) {
+			return false;
 		}
 		
 		return true;

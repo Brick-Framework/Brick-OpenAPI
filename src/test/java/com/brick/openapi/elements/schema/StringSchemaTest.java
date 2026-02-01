@@ -31,7 +31,7 @@ public class StringSchemaTest {
 		FileReader fileReader = new YamlFileReader(filePath);
 		BrickMap stringMap = fileReader.getMap();
 		
-		StringSchema schema = new StringSchema(stringMap, null);
+		StringSchema schema = new StringSchema(stringMap);
 		assertFalse( schema.validateData(null));
 		assertFalse(schema.validateData(JsonNodeFactory.instance.nullNode()));
 		assertFalse( schema.validateData(JsonNodeFactory.instance.objectNode()));
@@ -52,7 +52,7 @@ public class StringSchemaTest {
 		FileReader fileReader = new YamlFileReader(filePath);
 		BrickMap stringMap = fileReader.getMap();
 		
-		StringSchema schema = new StringSchema(stringMap, null);
+		StringSchema schema = new StringSchema(stringMap);
 		assertTrue( schema.validateData(null));
 		assertTrue(schema.validateData(JsonNodeFactory.instance.nullNode()));
 		
@@ -69,7 +69,7 @@ public class StringSchemaTest {
 		FileReader fileReader = new YamlFileReader(filePath);
 		BrickMap stringMap = fileReader.getMap();
 		
-		StringSchema schema = new StringSchema(stringMap, null);
+		StringSchema schema = new StringSchema(stringMap);
 		
 		StringNode contentNode = new StringNode("abcd");
 		assertFalse( schema.validateData(contentNode));
@@ -90,32 +90,32 @@ public class StringSchemaTest {
 		
 		when( brickMap.getOptionalString(OpenAPIKeyConstants.FORMAT)).thenReturn(Optional.of("date"));
 		assertDoesNotThrow(()->{
-			new StringSchema(brickMap, null);
+			new StringSchema(brickMap);
 		});
 		
 		when( brickMap.getOptionalString(OpenAPIKeyConstants.FORMAT)).thenReturn(Optional.of("date-time"));
 		assertDoesNotThrow(()->{
-			new StringSchema(brickMap, null);
+			new StringSchema(brickMap);
 		});
 		
 		when( brickMap.getOptionalString(OpenAPIKeyConstants.FORMAT)).thenReturn(Optional.of("password"));
 		assertDoesNotThrow(()->{
-			new StringSchema(brickMap, null);
+			new StringSchema(brickMap);
 		});
 		
 		when( brickMap.getOptionalString(OpenAPIKeyConstants.FORMAT)).thenReturn(Optional.of("uuid"));
 		assertDoesNotThrow(()->{
-			new StringSchema(brickMap, null);
+			new StringSchema(brickMap);
 		});
 		
 		when( brickMap.getOptionalString(OpenAPIKeyConstants.FORMAT)).thenReturn(Optional.of("email"));
 		assertDoesNotThrow(()->{
-			new StringSchema(brickMap, null);
+			new StringSchema(brickMap);
 		});
 		
 		when( brickMap.getOptionalString(OpenAPIKeyConstants.FORMAT)).thenReturn(Optional.of("invalid"));
 		assertThrows(InvalidValue.class,()->{
-			new StringSchema(brickMap, null);
+			new StringSchema(brickMap);
 		});
 	}
 }

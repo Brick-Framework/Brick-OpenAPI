@@ -1,18 +1,16 @@
 package com.brick.openapi.elements.schema;
 
-import com.brick.logger.Logger;
-import com.brick.utilities.exception.KeyNotFound;
-
-import tools.jackson.databind.JsonNode;
+import java.util.HashSet;
+import java.util.Optional;
+import java.util.Set;
 
 import com.brick.openapi.elements.Components;
 import com.brick.openapi.exception.InvalidValue;
 import com.brick.openapi.reader.OpenAPIKeyConstants;
 import com.brick.utilities.BrickMap;
+import com.brick.utilities.exception.KeyNotFound;
 
-import java.util.HashSet;
-import java.util.Optional;
-import java.util.Set;
+import tools.jackson.databind.JsonNode;
 
 public class ArraySchema extends Schema{
     private final Schema items;
@@ -77,12 +75,8 @@ public class ArraySchema extends Schema{
 		
 		
 		//Checking Unique Item Condition
-		if( this.uniqueItems && visitedNodes.size() != arraySize ) {
-			return false;
-		}
 		
-		
-		return true;
+		return !( this.uniqueItems && visitedNodes.size() != arraySize );
 	}
     
     

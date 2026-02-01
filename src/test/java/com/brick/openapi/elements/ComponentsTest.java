@@ -1,7 +1,7 @@
 package com.brick.openapi.elements;
 
-import com.brick.openapi.elements.path.Parameter;
 import com.brick.openapi.elements.path.Response;
+import com.brick.openapi.elements.path.parameter.Parameter;
 import com.brick.openapi.elements.schema.Schema;
 import com.brick.openapi.elements.security.scheme.BasicAuthScheme;
 import com.brick.openapi.elements.security.scheme.BearerAuthScheme;

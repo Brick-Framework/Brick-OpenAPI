@@ -1,6 +1,10 @@
 package com.brick.openapi.reader;
 
 public class OpenAPIKeyConstants {
+	
+	private OpenAPIKeyConstants() {
+		super();
+	}
 
     //Common ELEMENTS
     public static final String DESCRIPTION = "description";

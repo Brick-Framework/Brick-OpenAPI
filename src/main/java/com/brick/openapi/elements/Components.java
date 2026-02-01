@@ -2,8 +2,8 @@ package com.brick.openapi.elements;
 
 import com.brick.utilities.exception.KeyNotFound;
 import com.brick.logger.Logger;
-import com.brick.openapi.elements.path.Parameter;
 import com.brick.openapi.elements.path.Response;
+import com.brick.openapi.elements.path.parameter.Parameter;
 import com.brick.openapi.elements.schema.Schema;
 import com.brick.openapi.elements.schema.SchemaFactory;
 import com.brick.openapi.elements.security.scheme.SecurityScheme;
@@ -19,7 +19,7 @@ public class Components {
     private final Map<String, Parameter> parameters;
     private final Map<String, Schema> schemas;
     private final Map<String, Response> responses;
-    private final Map<String, SecurityScheme> securityScheme;
+    private final Map<String, SecurityScheme> secSchemeMap;
 
     public Components(BrickMap brickMap) throws KeyNotFound, InvalidValue, CyclicReferenceFound {
         
@@ -32,7 +32,7 @@ public class Components {
         this.responses = new HashMap<>();
         populateResponses(brickMap);
 
-        this.securityScheme = new HashMap<>();
+        this.secSchemeMap = new HashMap<>();
         populateSecurityScheme(brickMap);
         
     }
@@ -81,8 +81,8 @@ public class Components {
         Description: Return SecurityScheme From Map of Responses
      */
     public SecurityScheme getSecurityScheme(String securitySchemeName) throws KeyNotFound {
-        if( this.securityScheme.containsKey(securitySchemeName) ){
-            return this.securityScheme.get(securitySchemeName);
+        if( this.secSchemeMap.containsKey(securitySchemeName) ){
+            return this.secSchemeMap.get(securitySchemeName);
         }
 
         KeyNotFound keyNotFound = new KeyNotFound(securitySchemeName);
@@ -129,10 +129,34 @@ public class Components {
             BrickMap securitySchemeMap = brickMap.getBrickMap(OpenAPIKeyConstants.COMPONENT_SECURITY_SCHEMES);
             for( Map.Entry<String,Object> entry: securitySchemeMap ){
                 SecurityScheme securityScheme = SecuritySchemeFactory.getSecurityScheme(securitySchemeMap.getBrickMap(entry.getKey()));
-                this.securityScheme.put(entry.getKey(), securityScheme);
+                this.secSchemeMap.put(entry.getKey(), securityScheme);
             }
         }
         
+    }
+    
+    private Map<String,List<String>> generateGraph(BrickMap schemaMap) throws KeyNotFound, InvalidValue{
+    	Map<String, List<String>> schemaReferenceGraph = new HashMap<>();
+        for (Map.Entry<String, Object> entry : schemaMap) {
+            List<String> reference = Schema.getReferences(schemaMap.getBrickMap(entry.getKey()));  
+            schemaReferenceGraph.put(entry.getKey(), reference);
+        }
+        
+        return schemaReferenceGraph;
+    }
+    
+    /*
+     * Description: Returns a Queue with all nodes that have indegree zero
+     */
+    private Queue<String> getNodesWithZeroIndegree(Map<String,List<String>> schemaReferenceGraph) {
+    	Queue<String> queue = new ArrayDeque<>();
+        for (Map.Entry<String, List<String>> entry : schemaReferenceGraph.entrySet()) {
+            if (entry.getValue().isEmpty()) {
+                queue.add(entry.getKey());
+            }
+        }
+        
+        return queue;
     }
 
     /*
@@ -143,21 +167,12 @@ public class Components {
         if( brickMap.contains(OpenAPIKeyConstants.COMPONENT_SCHEMAS) ) {
             BrickMap schemaMap = brickMap.getBrickMap(OpenAPIKeyConstants.COMPONENT_SCHEMAS);
             // Creating Graph of Where Schema is a Node and Reference is a Vertex
-            Map<String, List<String>> schemaReferenceGraph = new HashMap<>();
-            for (Map.Entry<String, Object> entry : schemaMap) {
-                List<String> reference = Schema.getReferences(schemaMap.getBrickMap(entry.getKey()));  
-                schemaReferenceGraph.put(entry.getKey(), reference);
-            }
+            Map<String, List<String>> schemaReferenceGraph = generateGraph(schemaMap);
 
             cyclicSchemaReferenceCheck(schemaReferenceGraph); // Performing Cyclic check in creating graph to ensure there is no cyclic dependency
 
             // Creating Schema Based on OutDegree to ensure schema with references to other schema are created at last
-            Queue<String> queue = new ArrayDeque<>();
-            for (Map.Entry<String, List<String>> entry : schemaReferenceGraph.entrySet()) {
-                if (entry.getValue().isEmpty()) {
-                    queue.add(entry.getKey());
-                }
-            }
+            Queue<String> queue = getNodesWithZeroIndegree(schemaReferenceGraph);
 
             Set<String> completed = new HashSet<>();
             while (!queue.isEmpty()) {

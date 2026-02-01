@@ -9,15 +9,15 @@ public class InvalidOpenAPISpecification extends Exception {
         INVALID_DATA_TYPE("Invalid Data Type"),
         CYCLIC_REFERENCE("Cyclic Reference");
 
-        private final String reason;
+        private final String reasonForFailure;
 
         Reason(String reason) {
-            this.reason = reason;
+            this.reasonForFailure = reason;
         }
 
         @Override
         public String toString() {
-            return reason;
+            return reasonForFailure;
         }
     }
 

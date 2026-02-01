@@ -63,6 +63,6 @@ public class Response {
     		return content.get().validateData(responseBody);
     	}
     	
-    	return responseBody == null || responseBody.isEmpty() ; // If Content definition is not found responseBody should be null;
+    	return responseBody == null || responseBody.isEmpty() ; // If Content definition is not found responseBody should be null
     }
 }

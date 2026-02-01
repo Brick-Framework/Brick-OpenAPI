@@ -11,19 +11,23 @@ public class SecuritySchemeFactory {
 
     private static final String SCHEME_HTTP_BASIC = "basic";
     private static final String SCHEME_HTTP_BEARER = "bearer";
+    
+    private SecuritySchemeFactory() {
+    	super();
+    }
+    
     public static SecurityScheme getSecurityScheme(BrickMap brickMap) throws KeyNotFound, InvalidValue {
         
         String type = brickMap.getString(OpenAPIKeyConstants.SCHEME_TYPE);
-
-        switch ( type ){
-            case SCHEME_TYPE_HTTP:
-                return getHttpTypeSecurityScheme(brickMap);
-
-            default:
-                InvalidValue invalidValue = new InvalidValue(type);
-                Logger.logException(invalidValue);
-                throw invalidValue;
+        
+        if( SCHEME_TYPE_HTTP.equals(type) ) {
+        	return getHttpTypeSecurityScheme(brickMap);
         }
+
+
+        InvalidValue invalidValue = new InvalidValue(type);
+        Logger.logException(invalidValue);
+        throw invalidValue;
     }
 
     private static SecurityScheme getHttpTypeSecurityScheme(BrickMap brickMap) throws KeyNotFound, InvalidValue {

@@ -15,7 +15,7 @@ import com.brick.utilities.BrickMap;
 import java.util.*;
 
 public class Content {
-    private final Map<String,Schema> content;
+    private final Map<String,Schema> contentSchemaMap;
     
     private static final String JSON_DATA = "application/json";
 
@@ -30,28 +30,28 @@ public class Content {
 
     public Content(BrickMap brickMap, Components components) throws KeyNotFound, InvalidValue {
         
-        this.content = new HashMap<>();
+        this.contentSchemaMap = new HashMap<>();
         for(Map.Entry<String,Object> entry : brickMap ){
             if( !validContentType.contains(entry.getKey()) ){
                 InvalidValue invalidValue = new InvalidValue(entry.getKey());
                 Logger.logException(invalidValue);
                 throw invalidValue;
             }
-            this.content.put(entry.getKey(), SchemaFactory.getSchema(new BrickMap( entry.getValue() ) .getBrickMap(OpenAPIKeyConstants.SCHEMA), components ) );
+            this.contentSchemaMap.put(entry.getKey(), SchemaFactory.getSchema(new BrickMap( entry.getValue() ) .getBrickMap(OpenAPIKeyConstants.SCHEMA), components ) );
         }
 
         
     }
 
     public Map<String, Schema> getContent() {
-        return content;
+        return contentSchemaMap;
     }
     
     /*
      * Description: Validates Request Body
      */
     public boolean validateData(JsonNode data) {
-    	for( Map.Entry<String, Schema> entry: content.entrySet() ) {
+    	for( Map.Entry<String, Schema> entry: contentSchemaMap.entrySet() ) {
     		if( entry.getValue().validateData(data) ) {
     			return true;
     		}

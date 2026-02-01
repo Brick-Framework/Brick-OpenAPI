@@ -1,14 +1,14 @@
 package com.brick.openapi.elements.security;
 
-import com.brick.utilities.exception.KeyNotFound;import com.brick.logger.Logger;
-import com.brick.openapi.elements.Components;
-import com.brick.openapi.elements.security.scheme.SecurityScheme;
-import com.brick.openapi.exception.InvalidValue;
-import com.brick.utilities.BrickMap;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+
+import com.brick.logger.Logger;
+import com.brick.openapi.elements.Components;
+import com.brick.openapi.elements.security.scheme.SecurityScheme;
+import com.brick.openapi.exception.InvalidValue;
+import com.brick.utilities.exception.KeyNotFound;
 
 public class Security {
     private final List<SecurityScheme> securityScheme;
@@ -26,7 +26,6 @@ public class Security {
                     Logger.logException(invalidValue);
                     throw invalidValue;
                 }
-                break;
             }
         }
         

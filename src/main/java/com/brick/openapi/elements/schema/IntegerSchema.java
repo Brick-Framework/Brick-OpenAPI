@@ -1,17 +1,14 @@
 package com.brick.openapi.elements.schema;
 
-import com.brick.logger.Logger;
-import com.brick.utilities.exception.KeyNotFound;
+import java.util.List;
+import java.util.Optional;
 
-import tools.jackson.databind.JsonNode;
-
-import com.brick.openapi.elements.Components;
 import com.brick.openapi.exception.InvalidValue;
 import com.brick.openapi.reader.OpenAPIKeyConstants;
 import com.brick.utilities.BrickMap;
+import com.brick.utilities.exception.KeyNotFound;
 
-import java.util.List;
-import java.util.Optional;
+import tools.jackson.databind.JsonNode;
 
 public class IntegerSchema extends Schema {
     private final Optional<Integer> minimum;
@@ -19,7 +16,7 @@ public class IntegerSchema extends Schema {
     private final Optional<List<Integer>> possibleValues;
     private final boolean nullable;
 
-    public IntegerSchema(BrickMap brickMap, Components components) throws KeyNotFound, InvalidValue {
+    public IntegerSchema(BrickMap brickMap) throws KeyNotFound, InvalidValue {
         
         this.minimum = brickMap.getOptionalInteger(OpenAPIKeyConstants.MINIMUM);
         this.maximum = brickMap.getOptionalInteger(OpenAPIKeyConstants.MAXIMUM);
@@ -57,11 +54,7 @@ public class IntegerSchema extends Schema {
 		if( this.maximum.isPresent() && value > this.maximum.get() ) {
 			return false;
 		}
-		if( this.possibleValues.isPresent() && !this.possibleValues.get().contains(value) ) {
-			return false;
-		}
-		
-		return true;
+		return !( this.possibleValues.isPresent() && !this.possibleValues.get().contains(value) );
 	}
     
     
